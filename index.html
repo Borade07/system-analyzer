@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Analyzer</title>
+
+    <style>
+        :root {
+            --primary: #00ff90;
+            --bg: #0d1117;
+            --terminal-bg: #000;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            /* Prevent body scroll */
+        }
+
+        /* Terminal Box */
+        .terminal-box {
+            width: 92%;
+            max-width: 800px;
+            height: 80vh;
+            background: var(--terminal-bg);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 144, 0.2);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #333;
+        }
+
+        /* Header */
+        .header {
+            background: #161b22;
+            padding: 10px 15px;
+            font-size: 12px;
+            color: #888;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Terminal Area */
+        .terminal {
+            padding: 15px;
+            overflow-y: auto;
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            /* Hide scrollbar for Chrome, Safari and Opera */
+            scrollbar-width: thin;
+            scrollbar-color: #333 transparent;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .terminal {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            .terminal-box {
+                height: 85vh;
+            }
+
+            .header {
+                font-size: 10px;
+            }
+        }
+
+        /* Blinking Cursor Class */
+        .typing::after {
+            content: "█";
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Line Styles */
+        .line {
+            margin-bottom: 4px;
+            min-height: 1.2em;
+        }
+
+        .warning {
+            color: #ff4c4c;
+            text-shadow: 0 0 5px #ff4c4c;
+        }
+
+        .highlight {
+            color: #00eaff;
+            font-weight: bold;
+        }
+
+        .glow {
+            text-shadow: 0 0 5px #00ff90;
+        }
+
+        .birthday {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 0 0 10px gold;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* Button */
+        .start-btn {
+            background: var(--primary);
+            color: black;
+            border: none;
+            padding: 15px;
+            font-weight: bold;
+            font-family: inherit;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .start-btn:active {
+            background: #00cc70;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="terminal-box">
+        <div class="header">
+            <span>UnifyCore Analyzer v3.0</span>
+            <span>SYS: ONLINE</span>
+        </div>
+
+        <div id="terminal" class="terminal">
+            <div class="line">Looking for unified platform...</div>
+            <div class="line">Validating customer lifecycle capabilities...</div>
+        </div>
+
+        <button class="start-btn" id="runBtn" onclick="startTyping()">START DISCOVERY</button>
+    </div>
+
+    <script>
+        const lines = [
+            "> Initializing AI Engine...",
+            "> Connecting to core modules...",
+            "",
+            "> Scanning system capabilities...",
+            "> Account Management... ✔",
+            "> Ticketing System... ✔",
+            "> Customer Success... ✔",
+            "> Email Integration... ✔",
+            "> Proposal Management... ✔",
+            "> Orders Tracking... ✔",
+            "> Consumption Analytics... ✔",
+            "> Onboarding Flow... ✔",
+            "> Renewal Management... ✔",
+            "> Running advanced intelligence modules...",
+            "> Churn Prediction Engine... ✔",
+            "> Account Health Scoring... ✔",
+            "> Opportunity Health Analysis... ✔",
+            "> Proposal vs Order Mapping... ✔",
+            "",
+            "> Processing unified integration...",
+            "> Status: SUCCESS ✅",
+            "",
+            "> Identifying Architecture Source...",
+            "> Engineers... ✔",
+            "> Sales Minds... ✔",
+            "> Innovators... ✔",
+            "",
+            "> Organization: SCIQUS 🚀",
+            "> Product Identified: Sciqus AMS",
+            "",
+            "> [CRITICAL] Core dependency detected...",
+            "> System integrity linked to unique source...",
+            "",
+            "> SOURCE IDENTIFIED:",
+            "> Founder & CEO 👑",
+            "> Supported by: Co-Founder",
+            "",
+            "> FINAL OUTPUT:",
+            "> This entire ecosystem exists because of you.",
+            "",
+            "> Happy Birthday Sir 🎉",
+            "> You didn’t just build a product...",
+            "> You built the system behind everything 🚀"
+        ];
+
+        let lineIdx = 0;
+        let charIdx = 0;
+        const terminal = document.getElementById("terminal");
+        const btn = document.getElementById("runBtn");
+
+        function getStyleClass(line)
+        {
+            if (line.includes("[CRITICAL]")) return "warning";
+            if (line.includes("Founder") || line.includes("CEO")) return "highlight";
+            if (line.includes("Happy Birthday")) return "birthday";
+            if (line.includes("system") || line.includes("ecosystem")) return "glow";
+            return "";
+        }
+
+        function scrollToBottom()
+        {
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function startTyping()
+        {
+            btn.classList.add("hidden");
+            terminal.innerHTML = ""; // Clear initial text
+            typeNextLine();
+        }
+
+        function typeNextLine()
+        {
+            if (lineIdx < lines.length)
+            {
+                const currentText = lines[lineIdx];
+                const styleClass = getStyleClass(currentText);
+
+                // Create a new div for the line
+                const lineDiv = document.createElement("div");
+                lineDiv.className = "line " + styleClass + " typing";
+                terminal.appendChild(lineDiv);
+
+                charIdx = 0;
+                typeCharacter(lineDiv, currentText);
+            }
+        }
+
+        function typeCharacter(element, text)
+        {
+            if (charIdx < text.length)
+            {
+                element.innerHTML = text.substring(0, charIdx + 1);
+                charIdx++;
+
+                // Adaptive typing speed
+                let speed = 25;
+                if (text.includes("CRITICAL")) speed = 50;
+                if (text.includes("Happy Birthday")) speed = 80;
+
+                scrollToBottom();
+                setTimeout(() => typeCharacter(element, text), speed);
+            } else
+            {
+                // Line finished
+                element.classList.remove("typing"); // Remove cursor from finished line
+                lineIdx++;
+                scrollToBottom();
+                setTimeout(typeNextLine, 150);
+            }
+        }
+    </script>
+
+</body>
+
+</html>
